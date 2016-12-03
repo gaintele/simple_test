@@ -50,5 +50,6 @@ bool IsPrime(int nr);
 void PrintPrime();
 void* foo(void* arg);
 void TestMultiThread();
+void TestLinkList();
 
 #endif

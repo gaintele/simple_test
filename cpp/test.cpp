@@ -14,6 +14,7 @@
 
 #include "test.h"
 #include "basic_algo.h"
+#include "basic_struct.h"
 
 #define SZ10 10
 #define SZ1K 1024
@@ -498,4 +499,15 @@ void TestMultiThread()
     pthread_join(tid, NULL);
 
     return;
+}
+
+void TestLinkList()
+{
+    LNode* head = LinkListCreate();
+    LinkListInit(head);
+    printf("LinkListSize:%d\n", LinkListSize(head));
+    LinkListPrint(head);
+    LinkListInsert(head, 4, 999);
+    LinkListPrint(head);
+    LinkListDestroy(head);
 }

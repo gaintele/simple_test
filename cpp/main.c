@@ -23,7 +23,8 @@ int main (int argc, char* argv[])
 //    TestMap();
 //    TestStringSize();
 //    PrintPrime();
-    TestMultiThread();
+//    TestMultiThread();
+    TestLinkList();
 
     return 0;
 }
