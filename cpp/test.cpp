@@ -64,7 +64,7 @@ int test(void)
             mapCap += (vecRs.size()*sizeof(iituple));
             if (mapCap > SZ1G)
             {
-                printf("i=%d, j=%d, clear map capacity:%d, map size:%d\n", i, j, mapCap, queryRs.size());
+                printf("i=%d, j=%d, clear map capacity:%d, map size:%lu\n", i, j, mapCap, queryRs.size());
                 mapCap = 0;
                 //queryRs.clear();
                 //map<int, vector<iituple> >().swap(queryRs);
@@ -425,6 +425,8 @@ int TestMap()
     cout << now << ":" << cnt << endl;
 
     free(array);
+
+    return 0;
 }
 
 int TestStringSize()
@@ -473,7 +475,7 @@ void* foo(void* arg)
 {
     int i = 0;
     while (1) {
-        printf("child thread pid %d, tid %u, cnt %d: hello world!\n", getpid(), (unsigned int)pthread_self(), i++);
+        printf("child thread pid %d, tid %lu, cnt %d: hello world!\n", getpid(), (unsigned long)pthread_self(), i++);
         sleep(2);
     }
 
@@ -492,7 +494,7 @@ void TestMultiThread()
     sleep(1);
     int i = 0;
     while (1) {
-        printf("main  thread pid %d, tid %u, cnt %d: hello world!\n", getpid(), (unsigned int)pthread_self(), i++);
+        printf("main  thread pid %d, tid %lu, cnt %d: hello world!\n", getpid(), (unsigned long)pthread_self(), i++);
         sleep(2);
     }
 

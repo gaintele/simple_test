@@ -193,13 +193,13 @@ int LinkListDetechRing(LNode* head)
 {
     if (!head) return -1;
 
-    size_t i = 0;
+    int i = 0;
     LNode* slow = head->next;
     LNode* fast = head->next;
     while (slow && fast && fast->next)
     {
-        printf("step %d, slow %x, data %d, fast %x, data %d\n", 
-                i, (unsigned)slow, slow->data, (unsigned)fast, fast->data);
+        printf("step %d, slow %lu, data %d, fast %lu, data %d\n", 
+                i, (unsigned long)slow, slow->data, (unsigned long)fast, fast->data);
 
         if (i > 0 && slow == fast)
             break;
