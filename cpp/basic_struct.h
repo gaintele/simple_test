@@ -6,13 +6,14 @@
 
 typedef struct LNode
 {
-    int data;
+    int data;           //头指针中存储链表的长度
     struct LNode* next;
 }LNode, *LinkList;
 
 LNode* LinkListCreate()
 {
     LNode* head = (LNode*)malloc(sizeof(LNode));
+    head->data = 0;
     head->next = NULL;
 
     return head;
@@ -20,8 +21,7 @@ LNode* LinkListCreate()
 
 int LinkListInit(LNode* head)
 {
-    if (NULL == head)
-        return -1;
+    if (!head) return -1;
 
     int e = 0;
     while (scanf("%d", &e))
@@ -30,6 +30,23 @@ int LinkListInit(LNode* head)
         p->data = e;
         p->next = head->next;
         head->next = p;
+        head->data++;
+    }
+
+    return 0;
+}
+
+int LinkListInit(LNode* head, int array[], int size)
+{
+    if (!head) return -1;
+
+    for (int i = 0; i < size; ++i)
+    {
+        LNode* p = (LNode*)malloc(sizeof(LNode));
+        p->data = array[i];
+        p->next = head->next;
+        head->next = p;
+        head->data++;
     }
 
     return 0;
@@ -37,12 +54,12 @@ int LinkListInit(LNode* head)
 
 void LinkListPrint(LNode* head)
 {
-    if (NULL == head)
-        return;
+    if (!head) return;
 
     printf("LinkList:");
+    int size = head->data;
     LNode* p = head->next;
-    while (p)
+    while (p && size--)
     {
         printf("%d ", p->data);
         p = p->next;
@@ -55,57 +72,156 @@ void LinkListPrint(LNode* head)
 
 void LinkListDestroy(LNode* head)
 {
-    size_t size = 0;
-    LNode* p = head;
-    while (p != NULL)
+    if (!head) return;
+
+    int size = head->data;
+    LNode* p = head->next;;
+
+    while (p && size--)
     {
         LNode* c = p;
         p = p->next;
-        delete c;
+        free(c);
         c = NULL;
-        ++size;
     }
-    printf("free %d LNodes(include head)\n", size);
+    free(head);
+    head = NULL;
 
     return;
 }
 
-size_t LinkListSize(LNode* head)
+int LinkListSize(LNode* head)
 {
-    if (NULL == head)
-        return 0;
+    if (!head) return 0;
 
-    size_t size = 0;
-    LNode* p = head->next;
-    while (p != NULL) 
-    {
-        size++;
-        p = p->next;
-    }
-
-    return size;
+    return head->data;
 }
 
-int LinkListInsert(LNode* head, int i, int e)
+int LinkListPushFront(LNode* head, int e)
 {
-    if (NULL == head)
-        return -1;
+    if (!head) return -1;
 
-    int j = 0;
-    LNode* p = head->next;
-    while (p != NULL && j < i-1)
-        p = p->next, ++j;
+    LNode* n = (LNode*)malloc(sizeof(LNode));
+    n->data = e;
+    n->next = head->next;
+    head->next = n;
 
-    if (NULL == p)
-        return -1;
+    head->data++;
 
-//    printf("i=%d, j=%d, data=%d\n", i, j, p->data);
+    return 0;
+}
+
+int LinkListPushBack(LNode* head, int e)
+{
+    if (!head) return -1;
+
+    LNode* p = head;
+    while (p->next) p = p->next;
     LNode* n = (LNode*)malloc(sizeof(LNode));
     n->data = e;
     n->next = p->next;
     p->next = n;
 
+    head->data++;
+
     return 0;
 }
+
+int LinkListInsert(LNode* head, int i, int e)
+{
+    if (!head) return -1;
+
+    int j = 0;
+    LNode* p = head->next;
+    while (p && j < i-1)
+        p = p->next, ++j;
+
+    if (!p) return -1;
+
+    LNode* n = (LNode*)malloc(sizeof(LNode));
+    n->data = e;
+    n->next = p->next;
+    p->next = n;
+
+    head->data++;
+
+    return 0;
+}
+
+//////////////////
+int LinkListReverse(LNode* head)
+{
+    if (!head) return -1;
+
+    LNode* pre = NULL;
+    LNode* p = head->next;
+    while (p)
+    {
+        LNode* cur = p;
+        p = p->next;
+        cur->next = pre;
+        pre = cur;
+    }
+
+    head->next = pre;
+    return 0;
+}
+
+int LinkListBuildRing(LNode* head, int i)
+{
+    if (!head || i < 0 || i >= head->data) return -1;
+
+    int j = 0;
+    LNode* entry = NULL;
+    LNode* p = head;
+    while (p->next)
+    {
+        p = p->next;
+        if (j == i)
+            entry = p;
+        ++j;
+    }
+
+    if (!entry || entry == p) return -1;
+
+    p->next = entry;
+
+    return 0;
+}
+
+int LinkListDetechRing(LNode* head)
+{
+    if (!head) return -1;
+
+    size_t i = 0;
+    LNode* slow = head->next;
+    LNode* fast = head->next;
+    while (slow && fast && fast->next)
+    {
+        printf("step %d, slow %x, data %d, fast %x, data %d\n", 
+                i, (unsigned)slow, slow->data, (unsigned)fast, fast->data);
+
+        if (i > 0 && slow == fast)
+            break;
+
+        slow = slow->next;
+        fast = fast->next->next;
+        ++i;
+    }
+
+    if (slow != fast) return -1;
+
+    i = 0;
+    LNode* p = head->next;
+    while (p && slow && p != slow)
+    {
+        p = p->next;
+        slow = slow->next;
+        ++i;
+    }
+
+    return i;
+}
+
 
 #endif

@@ -504,10 +504,37 @@ void TestMultiThread()
 void TestLinkList()
 {
     LNode* head = LinkListCreate();
-    LinkListInit(head);
+    //int array[] = {1, 9, 3, 8, 6, 4, 5, 6, 4, 1, 9, 0, 1, 7};
+    int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15};
+    int size = 14;
+
+    LinkListInit(head, array, size);
     printf("LinkListSize:%d\n", LinkListSize(head));
     LinkListPrint(head);
-    LinkListInsert(head, 4, 999);
+
+    int insert_idx = 4;
+    int e = 11;
+    LinkListInsert(head, insert_idx, e);
     LinkListPrint(head);
+
+    e = 16;
+    LinkListPushFront(head, e);
+    LinkListPrint(head);
+
+    e = 0;
+    LinkListPushBack(head, e);
+    LinkListPrint(head);
+
+    LinkListReverse(head);
+    LinkListPrint(head);
+
+    int cross_idx = 7;
+    printf("build ring, cross idx %d\n", cross_idx);
+    LinkListBuildRing(head, cross_idx);
+    LinkListPrint(head);
+
+    int ci = LinkListDetechRing(head);
+    printf("cross idx %d\n", ci);
+
     LinkListDestroy(head);
 }
