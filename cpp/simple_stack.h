@@ -74,6 +74,17 @@ int StackCapacity(SqStack* s)
     return s->capacity;
 }
 
+int StackEmpty(SqStack* s)
+{
+    printf("%s:\n", __FUNCTION__);
+    if (!s) return -1;
+
+    if (s->top == s->base)
+        return 1;
+    else
+        return 0;
+}
+
 int StackPrint(SqStack* s)
 {
     if (!s) return -1;
