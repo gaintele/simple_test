@@ -5,7 +5,7 @@ test:main.o test.o basic_algo.o
 main.o:main.cpp
 	$(CXXFLAG) -c main.cpp
 
-test.o:test.cpp test.h basic_struct.h
+test.o:test.cpp test.h simple_list.h simple_stack.h
 	$(CXXFLAG) -c test.cpp -lm
 
 basic_algo.o:basic_algo.cpp basic_algo.h

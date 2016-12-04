@@ -51,5 +51,6 @@ void PrintPrime();
 void* foo(void* arg);
 void TestMultiThread();
 void TestLinkList();
+void TestSqStack();
 
 #endif

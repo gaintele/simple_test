@@ -24,7 +24,8 @@ int main (int argc, char* argv[])
 //    TestStringSize();
 //    PrintPrime();
 //    TestMultiThread();
-    TestLinkList();
+//    TestLinkList();
+    TestSqStack();
 
     return 0;
 }

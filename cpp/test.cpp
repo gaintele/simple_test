@@ -14,7 +14,8 @@
 
 #include "test.h"
 #include "basic_algo.h"
-#include "basic_struct.h"
+#include "simple_list.h"
+#include "simple_stack.h"
 
 #define SZ10 10
 #define SZ1K 1024
@@ -530,6 +531,20 @@ void TestLinkList()
     LinkListReverse(head);
     LinkListPrint(head);
 
+    LinkListPopFront(head, e);
+    LinkListPrint(head);
+
+    LinkListPopBack(head, e);
+    LinkListPrint(head);
+
+    int delete_idx = 5;
+    LinkListDelete(head, delete_idx, e);
+    LinkListPrint(head);
+
+    insert_idx = 5;
+    LinkListInsert(head, insert_idx, e);
+    LinkListPrint(head);
+
     int cross_idx = 7;
     printf("build ring, cross idx %d\n", cross_idx);
     LinkListBuildRing(head, cross_idx);
@@ -539,4 +554,31 @@ void TestLinkList()
     printf("cross idx %d\n", ci);
 
     LinkListDestroy(head);
+
+    return;
+}
+
+void TestSqStack()
+{
+    SqStack s;
+    int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    int size = 15;
+    StackInit(&s, array, size);
+    StackPrint(&s);
+
+    printf("%d\n", StackCapacity(&s));
+    printf("%d\n", StackSize(&s));
+
+    int e;
+    StackGetTop(&s, e);
+    printf("%d\n", e);
+
+    StackPush(&s, e);
+    StackPrint(&s);
+
+    StackPop(&s, e);
+    StackPrint(&s);
+
+    StackDestroy(&s);
+    return;
 }
