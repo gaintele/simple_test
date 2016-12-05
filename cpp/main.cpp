@@ -8,7 +8,7 @@ int main (int argc, char* argv[])
 //	TestBinarySearch();
 //      TestInsertionSort();
 //      TestSelectionSort();
-//    TestQuickSort();
+    TestQuickSort();
 //    TestHeapSort();
 //    TestMergeSort();
 //    TestGetMemory();
@@ -24,8 +24,9 @@ int main (int argc, char* argv[])
 //    TestStringSize();
 //    PrintPrime();
 //    TestMultiThread();
-//    TestLinkList();
+    TestLinkList();
     TestSqStack();
+    TestLinkQueue();
 
     return 0;
 }

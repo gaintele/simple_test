@@ -16,6 +16,7 @@
 #include "basic_algo.h"
 #include "simple_list.h"
 #include "simple_stack.h"
+#include "simple_queue.h"
 
 #define SZ10 10
 #define SZ1K 1024
@@ -580,5 +581,11 @@ void TestSqStack()
     StackPrint(&s);
 
     StackDestroy(&s);
+    return;
+}
+
+void TestLinkQueue()
+{
+    LinkQueue<int> Q;
     return;
 }

@@ -52,5 +52,6 @@ void* foo(void* arg);
 void TestMultiThread();
 void TestLinkList();
 void TestSqStack();
+void TestLinkQueue();
 
 #endif
