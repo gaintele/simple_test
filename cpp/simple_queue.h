@@ -20,7 +20,7 @@ public:
     bool empty() const;
     int size() const;
 
-    bool dequeue(const T& e);
+    bool dequeue(T& e);
     bool enqueue(const T& e);
 
 private:
@@ -33,15 +33,29 @@ template<typename T>
 LinkQueue<T>::LinkQueue()
 {
     printf("%s:\n", __FUNCTION__);
-    QNode<T> *qnode=new QNode<T>();
-    qnode->next=NULL;
-    front=rear=qnode;
+    QNode<T>* qnode = new QNode<T>();
+    qnode->next = NULL;
+    front = rear = qnode;
+    
+    return;
 }
 
 template<typename T>
 LinkQueue<T>::~LinkQueue()
 {
     printf("%s:\n", __FUNCTION__);
+    QNode<T>* p = front;
+    while (p != rear)
+    {
+        QNode<T>* q = p;
+        p = p->next;
+        delete q;
+        q->next = NULL;
+    }
+    delete p;
+    p->next = NULL;
+
+    return;
 }
 
 template<typename T>
@@ -62,17 +76,14 @@ int LinkQueue<T>::size() const
     else
     {
         int i=1;
-        while(p->next != rear)
-        {
-            p=p->next;
-            i++;
-        }
+        for (; p->next != rear; p = p->next)
+            ++i;
         return i;
     }
 }
 
 template<typename T>
-bool LinkQueue<T>::dequeue(const T& e) 
+bool LinkQueue<T>::dequeue(T& e) 
 {
     if (empty())
         return false;

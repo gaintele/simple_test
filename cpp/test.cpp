@@ -473,12 +473,53 @@ void PrintPrime()
     }
 }
 
-void* foo(void* arg)
+string randString()
 {
+    srand(time(NULL));
+    int a = rand();
+    int b = rand();
+    int c = rand();
+    char data[30] = {0};
+    snprintf(data, 30, "%d%d%d", a, b, c);
+
+    return data;
+}
+
+void* mt_read_file(void* arg)
+{
+    LinkQueue<string>* Q = (LinkQueue<string>*)arg;
+    char* line = NULL;
+    size_t linecap = 0;
+    ssize_t linelen;
+    FILE* fp = fopen("./data/2", "rb");
+    //FILE* fp = fopen("./data/usr_file.txt", "rb");
+    while ((linelen = getline(&line, &linecap, fp)) > 0)
+    {
+        sleep(1);
+        Q->enqueue(line);
+    }
+
+    printf("include_file size:%d\n", Q->size());
+    fclose(fp);
+    if (!line) free(line);
+
     int i = 0;
     while (1) {
-        printf("child thread pid %d, tid %lu, cnt %d: hello world!\n", getpid(), (unsigned long)pthread_self(), i++);
+//        printf("child thread pid %d, tid %lu, cnt %d: hello world!\n", getpid(), (unsigned long)pthread_self(), i++);
         sleep(2);
+    }
+
+    return 0;
+}
+
+void* mt_print_file(void* arg)
+{
+    LinkQueue<string>* Q = (LinkQueue<string>*)arg;
+    while(1)
+    {
+        string e;
+        if (Q->dequeue(e))
+            printf("child thread pid %d, tid %lu, size %d\n", getpid(), (unsigned long)pthread_self(), Q->size());
     }
 
     return 0;
@@ -486,21 +527,31 @@ void* foo(void* arg)
 
 void TestMultiThread()
 {
-    pthread_t tid;
-    int ret = pthread_create(&tid, NULL, foo, NULL);
+    LinkQueue<string> Q;
+    pthread_t tid1, tid2;
+    int ret = pthread_create(&tid1, NULL, mt_read_file, (void*)&Q);
     if (ret) {
         printf("pthread_create failed\n");
         return;
     }
-
     sleep(1);
+
+    ret = pthread_create(&tid2, NULL, mt_print_file, (void*)&Q);
+    if (ret) {
+        printf("pthread_create failed\n");
+        return;
+    }
+    sleep(1);
+
     int i = 0;
     while (1) {
-        printf("main  thread pid %d, tid %lu, cnt %d: hello world!\n", getpid(), (unsigned long)pthread_self(), i++);
+        printf("main  thread pid %d, tid %lu, cnt %d: hello world! Q.size():%d\n", 
+            getpid(), (unsigned long)pthread_self(), i++, Q.size());
         sleep(2);
     }
 
-    pthread_join(tid, NULL);
+    pthread_join(tid1, NULL);
+    pthread_join(tid2, NULL);
 
     return;
 }
@@ -586,6 +637,20 @@ void TestSqStack()
 
 void TestLinkQueue()
 {
-    LinkQueue<int> Q;
+    LinkQueue<string> Q;
+    Q.enqueue(randString());
+    sleep(1);
+    Q.enqueue(randString());
+    sleep(1);
+    Q.enqueue(randString());
+    string e;
+    Q.dequeue(e);
+    printf("%s\n", e.c_str());
+    Q.dequeue(e);
+    printf("%s\n", e.c_str());
+
+    printf("size:%d\n", Q.size());
+    
+    printf("%s\n", randString().c_str());
     return;
 }
