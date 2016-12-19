@@ -35,7 +35,8 @@ hds=[{'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) 
      {'User-Agent':'Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11'}]
 
 #北京区域列表
-regions=[u"东城",u"西城",u"朝阳",u"海淀",u"丰台",u"石景山","通州",u"昌平",u"大兴",u"亦庄开发区",u"顺义",u"房山",u"门头沟",u"平谷",u"怀柔",u"密云",u"延庆",u"燕郊"]
+#regions=[u"东城",u"西城",u"朝阳",u"海淀",u"丰台",u"石景山","通州",u"昌平",u"大兴",u"亦庄开发区",u"顺义",u"房山",u"门头沟",u"平谷",u"怀柔",u"密云",u"延庆",u"燕郊"]
+regions=["dongcheng","xicheng","chaoyang","haidian","fengtai","shijingshan","tongzhou","changping","daxing","yizhuangkaifaqu","shunyi","fangshan","mentougou","pinggu","huairou","miyun","yanqing","yanjiao"]
 
 
 lock = threading.Lock()
@@ -103,11 +104,75 @@ class SQLiteWraper(object):
         return lists    
 
 
-def do_xiaoqu_spider(db_xq,region=u"昌平"):
+def gen_xiaoqu_insert_command(info_dict):
+    """
+    生成小区数据库插入命令
+    """
+    info_list=[u'小区名称',u'大区域',u'小区域',u'小区户型',u'建造时间']
+    t=[]
+    for il in info_list:
+        if il in info_dict:
+            t.append(info_dict[il])
+        else:
+            t.append('')
+    t=tuple(t)
+    command=(r"insert into xiaoqu values(?,?,?,?,?)",t)
+    return command
+
+
+def xiaoqu_spider(db_xq,url_page=u"http://bj.lianjia.com/xiaoqu/pg1rs%E6%98%8C%E5%B9%B3/"):
+    """
+    爬取页面链接中的小区信息
+    """
+
+    try:
+        req = urllib2.Request(url_page,headers=hds[random.randint(0,len(hds)-1)])
+        source_code = urllib2.urlopen(req,timeout=10).read()
+        plain_text=unicode(source_code)#,errors='ignore')   
+        soup = BeautifulSoup(plain_text)
+    except (urllib2.HTTPError, urllib2.URLError), e:
+        print e
+        exit(-1)
+    except Exception,e:
+        print e
+        exit(-1)
+
+    print url_page
+#    xiaoqu_list=soup.findAll('li',{'class':'clear xiaoquListItem'})
+    xiaoqu_list=soup.findAll('div',{'class':'info'})
+    for xq in xiaoqu_list:
+#        print xq
+        info_dict={}
+        posinfo = xq.find('div', {'class':'positionInfo'}).text.split('\n')
+        if len(posinfo) != 7:
+            print "Error parse Xiaoqu %s fail in region page %s" % (xq_url, url_page)
+            continue
+        xq_name = xq.find('a').text
+        xq_url = xq.find('a').get('href')
+        district = posinfo[2].strip()
+        bizcircle = posinfo[3].strip()
+        style = posinfo[4].strip()
+        age = posinfo[5].strip() 
+
+        print xq_name, xq_url, district, bizcircle, style, age
+
+        info_dict.update({u'小区名称':xq_name})
+        info_dict.update({u'url':xq_url})
+        info_dict.update({u'大区域':district})
+        info_dict.update({u'小区域':bizcircle})
+        info_dict.update({u'小区户型':style})
+        info_dict.update({u'建造时间':age})
+
+        command=gen_xiaoqu_insert_command(info_dict)
+#        print command
+        db_xq.execute(command,1)
+
+
+def do_xiaoqu_spider(db_xq,region="dongcheng"):
     """
     爬取大区域中的所有小区信息
     """
-    url=u"http://bj.lianjia.com/xiaoqu/rs"+region+"/"
+    url=u"http://bj.lianjia.com/xiaoqu/"+region+"/"
     try:
         req = urllib2.Request(url,headers=hds[random.randint(0,len(hds)-1)])
         source_code = urllib2.urlopen(req,timeout=5).read()
@@ -126,8 +191,10 @@ def do_xiaoqu_spider(db_xq,region=u"昌平"):
     print '%s : total_pages %d' % (region, total_pages)
 
 #    threads=[]
-#    for i in range(total_pages):
-#        url_page=u"http://bj.lianjia.com/xiaoqu/pg%drs%s/" % (i+1,region)
+    for i in range(total_pages):
+#    for i in range(1):
+        url_page=u"http://bj.lianjia.com/xiaoqu/%s/pg%d" % (region, i+1)
+        xiaoqu_spider(db_xq, url_page)
 #        t=threading.Thread(target=xiaoqu_spider,args=(db_xq,url_page))
 #        threads.append(t)
 #    for t in threads:
