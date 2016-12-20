@@ -108,7 +108,7 @@ def gen_xiaoqu_insert_command(info_dict):
     """
     生成小区数据库插入命令
     """
-    info_list=[u'小区名称',u'大区域',u'小区域',u'小区户型',u'建造时间']
+    info_list=[u'小区名称',u'大区域',u'小区域',u'小区户型',u'建造时间',u'小区均价',u'在售二手房',u'url']
     t=[]
     for il in info_list:
         if il in info_dict:
@@ -116,7 +116,7 @@ def gen_xiaoqu_insert_command(info_dict):
         else:
             t.append('')
     t=tuple(t)
-    command=(r"insert into xiaoqu values(?,?,?,?,?)",t)
+    command=(r"insert into xiaoqu values(?,?,?,?,?,?,?,?)",t)
     return command
 
 
@@ -138,30 +138,32 @@ def xiaoqu_spider(db_xq,url_page=u"http://bj.lianjia.com/xiaoqu/pg1rs%E6%98%8C%E
         exit(-1)
 
     print url_page
-#    xiaoqu_list=soup.findAll('li',{'class':'clear xiaoquListItem'})
-    xiaoqu_list=soup.findAll('div',{'class':'info'})
+    xiaoqu_list=soup.findAll('li',{'class':'clear xiaoquListItem'})
     for xq in xiaoqu_list:
-#        print xq
         info_dict={}
         posinfo = xq.find('div', {'class':'positionInfo'}).text.split('\n')
         if len(posinfo) != 7:
             print "Error parse Xiaoqu %s fail in region page %s" % (xq_url, url_page)
             continue
-        xq_name = xq.find('a').text
+        xq_name = xq.find('div', {'class':'title'}).text.strip()
         xq_url = xq.find('a').get('href')
         district = posinfo[2].strip()
         bizcircle = posinfo[3].strip()
         style = posinfo[4].strip()
         age = posinfo[5].strip() 
+        price = xq.find('div', {'class':'xiaoquListItemPrice'}).span.string
+        stock = xq.find('div', {'class':'xiaoquListItemSellCount'}).span.string
 
-        print xq_name, xq_url, district, bizcircle, style, age
+        print xq_name, district, bizcircle, style, age, price, stock, xq_url
 
         info_dict.update({u'小区名称':xq_name})
-        info_dict.update({u'url':xq_url})
         info_dict.update({u'大区域':district})
         info_dict.update({u'小区域':bizcircle})
         info_dict.update({u'小区户型':style})
         info_dict.update({u'建造时间':age})
+        info_dict.update({u'小区均价':price})
+        info_dict.update({u'在售二手房':stock})
+        info_dict.update({u'url':xq_url})
 
         command=gen_xiaoqu_insert_command(info_dict)
 #        print command
@@ -191,8 +193,8 @@ def do_xiaoqu_spider(db_xq,region="dongcheng"):
     print '%s : total_pages %d' % (region, total_pages)
 
 #    threads=[]
-    for i in range(total_pages):
-#    for i in range(1):
+#    for i in range(total_pages):
+    for i in range(1):
         url_page=u"http://bj.lianjia.com/xiaoqu/%s/pg%d" % (region, i+1)
         xiaoqu_spider(db_xq, url_page)
 #        t=threading.Thread(target=xiaoqu_spider,args=(db_xq,url_page))
@@ -220,7 +222,7 @@ def exception_spider(db_cj):
     """
 
 if __name__=="__main__":
-    command="create table if not exists xiaoqu (name TEXT primary key UNIQUE, regionb TEXT, regions TEXT, style TEXT, year TEXT)"
+    command="create table if not exists xiaoqu (name TEXT primary key UNIQUE, regionb TEXT, regions TEXT, style TEXT, year TEXT, price TEXT, stock TEXT, url TEXT)"
     db_xq=SQLiteWraper('lianjia-xq.db',command)
 
     command="create table if not exists chengjiao (href TEXT primary key UNIQUE, name TEXT, style TEXT, area TEXT, orientation TEXT, floor TEXT, year TEXT, sign_time TEXT, unit_price TEXT, total_price TEXT,fangchan_class TEXT, school TEXT, subway TEXT)"
