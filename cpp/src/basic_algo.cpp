@@ -399,7 +399,7 @@ int LongestAscSubSequnce(int array[], const int len, int sub_array[], int& sub_l
     return 0;
 }
 
-int longest_common_substring(char *str1, char *str2)
+int longest_common_substring(const char *str1, const char *str2)
 {
     int i,j,k,len1,len2,max,x,y;
     len1 = strlen(str1);

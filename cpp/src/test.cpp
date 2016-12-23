@@ -139,7 +139,7 @@ int TestBinarySearch(void)
     cout << endl;
 
     int index = rand() % len;
-    int e = array[index] - 2;
+    int e = array[index];
     int pos = BinarySearch(e, len, array);
     cout << "Target:" << e << " Position:" << pos << endl;
 
@@ -292,7 +292,7 @@ int TestPointer()
 
 int TestLog()
 {
-    for (int i = 0; i < 50; ++i)
+    for (int i = 0; i < 10; ++i)
     {
         double N = i*i;
         double x = log(N);
@@ -343,12 +343,12 @@ int TestVirtualClass()
 
 int TestLongestCommonSubstring(void)
 {
-    char str1[1000],str2[1000];
+    string str1, str2;
     printf("请输入第一个字符串：");
-    gets(str1);
+    std::cin >> str1;
     printf("请输入第二个字符串：");
-    gets(str2);
-    int len = longest_common_substring(str1, str2);
+    std::cin >> str2;
+    int len = longest_common_substring(str1.c_str(), str2.c_str());
     printf("最长公共连续子串的长度为：%d\n",len);
     return 0;
 }

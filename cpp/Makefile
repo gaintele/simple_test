@@ -1,15 +1,19 @@
+SRC = ./src
+OBJ = ./obj
+BIN = ./bin
+
 CXXFLAG=g++ -g
-test:main.o test.o basic_algo.o
-	$(CXXFLAG) -o test main.o test.o basic_algo.o -lpthread
+${BIN}/test:${OBJ}/main.o ${OBJ}/test.o ${OBJ}/basic_algo.o
+	$(CXXFLAG) -o ${BIN}/test ${OBJ}/main.o ${OBJ}/test.o ${OBJ}/basic_algo.o -lpthread -lm
 
-main.o:main.cpp
-	$(CXXFLAG) -c main.cpp
+${OBJ}/main.o:${SRC}/main.cpp
+	$(CXXFLAG) -c ${SRC}/main.cpp -o ${OBJ}/main.o
 
-test.o:test.cpp
-	$(CXXFLAG) -c test.cpp -lm
+${OBJ}/test.o:${SRC}/test.cpp
+	$(CXXFLAG) -c ${SRC}/test.cpp -o ${OBJ}/test.o
 
-basic_algo.o:basic_algo.cpp
-	$(CXXFLAG) -c basic_algo.cpp
+${OBJ}/basic_algo.o:${SRC}/basic_algo.cpp
+	$(CXXFLAG) -c ${SRC}/basic_algo.cpp -o ${OBJ}/basic_algo.o
 
 clean:
-	rm -rf *.o test
+	rm -rf ${OBJ}/*.o ${BIN}/test
