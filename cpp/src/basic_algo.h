@@ -42,7 +42,7 @@ int LongestAscSubSequnce(int array[], const int len, int sub_array[], int& sub_l
  *          |-     0             xi!=yj
  *   c[i,j]=|_     c[i-1,j-1]+1  xi=yj
  */
-int longest_common_substring(char *str1, char *str2);
+int longest_common_substring(const char *str1, const char *str2);
 
 /*
  * 最长公共子序列

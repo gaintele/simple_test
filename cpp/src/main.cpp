@@ -4,10 +4,10 @@
 
 int main (int argc, char* argv[])
 {
-//	TestBubbleSort();
-//	TestBinarySearch();
-//      TestInsertionSort();
-//      TestSelectionSort();
+//    TestBubbleSort();
+//    TestBinarySearch();
+//    TestInsertionSort();
+//    TestSelectionSort();
 //    TestQuickSort();
 //    TestHeapSort();
 //    TestMergeSort();
@@ -18,12 +18,12 @@ int main (int argc, char* argv[])
 //    TestLongestAscSubSequnce();
 //    TestVirtualClass();
 //    TestLongestCommonSubstring();
-//    TestBinaryExchange();
+    TestBinaryExchange();
 //    TestSwap();
 //    TestMap();
 //    TestStringSize();
 //    PrintPrime();
-    TestMultiThread();
+//    TestMultiThread();
 //    TestLinkList();
 //    TestSqStack();
 //    TestLinkQueue();
