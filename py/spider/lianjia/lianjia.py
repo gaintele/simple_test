@@ -282,8 +282,10 @@ def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%8
                 elif c.find(u'距')!=-1:
                     info_dict.update({u'地铁':c})
 
-        command=gen_chengjiao_insert_command(info_dict)
-        db_cj.execute(command,1)
+        print info_dict
+        exit(-1)
+#        command=gen_chengjiao_insert_command(info_dict)
+#        db_cj.execute(command,1)
 
 
 def xiaoqu_chengjiao_spider(db_cj,xq_id=u"1111027375142"):
@@ -319,7 +321,7 @@ def xiaoqu_chengjiao_spider(db_cj,xq_id=u"1111027375142"):
     for i in range(total_pages):
         url_page=u"http://bj.lianjia.com/chengjiao/pg%dc%s/" % (i+1,urllib2.quote(xq_id))
         print url_page
-#        chengjiao_spider(db_cj,url_page)
+        chengjiao_spider(db_cj,url_page)
 #        t=threading.Thread(target=chengjiao_spider,args=(db_cj,url_page))
 #        threads.append(t)
 #    for t in threads:
