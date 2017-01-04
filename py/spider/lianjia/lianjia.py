@@ -24,7 +24,6 @@ hds=[{'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) 
      {'User-Agent':'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'},\
      {'User-Agent':'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)'},\
      {'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0'},\
-     {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/44.0.2403.89 Chrome/44.0.2403.89 Safari/537.36'},\
      {'User-Agent':'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50'},\
      {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50'},\
      {'User-Agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0'},\
@@ -32,7 +31,23 @@ hds=[{'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) 
      {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1'},\
      {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11'},\
      {'User-Agent':'Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto/2.8.131 Version/11.11'},\
+     {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/44.0.2403.89 Chrome/44.0.2403.89 Safari/537.36'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 OPR/26.0.1656.60'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.50'},\
+     {'User-Agent':'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera 9.50'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0'},\
+     {'User-Agent':'Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36'},\
+     {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'},\
+     {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.133 Safari/534.16'},\
+     {'User-Agent':'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50'},\
+     {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50'},\
+     {'User-Agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0'},\
+     {'User-Agent':'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)'},\
+     {'User-Agent':'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36'},\
      {'User-Agent':'Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11'}]
+
 
 #北京区域列表
 #regions=[u"东城",u"西城",u"朝阳",u"海淀",u"丰台",u"石景山","通州",u"昌平",u"大兴",u"亦庄开发区",u"顺义",u"房山",u"门头沟",u"平谷",u"怀柔",u"密云",u"延庆",u"燕郊"]
@@ -92,7 +107,7 @@ class SQLiteWraper(object):
         return 0
 
     @conn_trans
-    def fetchall(self,command="select id from xiaoqu",conn=None):
+    def fetchall(self,command="select community_id from xiaoqu",conn=None):
         cu=conn.cursor()
         lists=[]
         try:
@@ -108,7 +123,7 @@ def gen_xiaoqu_insert_command(info_dict):
     """
     生成小区数据库插入命令
     """
-    info_list=[u'小区id',u'小区名称',u'大区域',u'小区域',u'小区户型',u'建造时间',u'小区均价',u'在售二手房',u'url']
+    info_list=[u'community_id',u'community_name',u'district',u'bizcircle',u'building_type',u'build_time',u'avg_price',u'stock',u'url']
     t=[]
     for il in info_list:
         if il in info_dict:
@@ -123,7 +138,7 @@ def gen_chengjiao_insert_command(info_dict):
     """
     生成成交记录数据库插入命令
     """
-    info_list=[u'houseid', u'communityid', u'communityname', u'roomnum', u'area', u'direction', u'decorator', u'dealtime', u'totalprice', u'floor', u'agent', u'unitprice', u'housetype', u'schooltype', u'subwaytype']
+    info_list=[u'house_id', u'community_id', u'community_name', u'room_num', u'area', u'direction', u'decorator', u'dealtime', u'total_price', u'floor', u'agent', u'unit_price', u'house_type', u'school_type', u'subway_type']
     t=[]
     for il in info_list:
         if il in info_dict:
@@ -151,7 +166,7 @@ def xiaoqu_spider(db_xq,url_page=u"http://bj.lianjia.com/xiaoqu/1111027375142/")
         print e
         exit(-1)
 
-    print url_page
+    print " %s" % url_page
 #    print plain_text
     xiaoqu_list=soup.findAll('li',{'class':'clear xiaoquListItem'})
     for xq in xiaoqu_list:
@@ -176,20 +191,19 @@ def xiaoqu_spider(db_xq,url_page=u"http://bj.lianjia.com/xiaoqu/1111027375142/")
         price = xq.find('div', {'class':'xiaoquListItemPrice'}).span.string
         stock = xq.find('div', {'class':'xiaoquListItemSellCount'}).span.string
 
-        print xq_id, xq_name, district, bizcircle, style, age, price, stock, xq_url
+        print "     %s %s %s %s %s %s %s %s %s" % (xq_id, xq_name, district, bizcircle, style, age, price, stock, xq_url)
 
-        info_dict.update({u'小区id':xq_id})
-        info_dict.update({u'小区名称':xq_name})
-        info_dict.update({u'大区域':district})
-        info_dict.update({u'小区域':bizcircle})
-        info_dict.update({u'小区户型':style})
-        info_dict.update({u'建造时间':age})
-        info_dict.update({u'小区均价':price})
-        info_dict.update({u'在售二手房':stock})
+        info_dict.update({u'community_id':xq_id})
+        info_dict.update({u'community_name':xq_name})
+        info_dict.update({u'district':district})
+        info_dict.update({u'bizcircle':bizcircle})
+        info_dict.update({u'building_type':style})
+        info_dict.update({u'build_time':age})
+        info_dict.update({u'avg_price':price})
+        info_dict.update({u'stock':stock})
         info_dict.update({u'url':xq_url})
 
         command=gen_xiaoqu_insert_command(info_dict)
-#        print command
         db_xq.execute(command,1)
 
 
@@ -210,28 +224,25 @@ def do_xiaoqu_spider(db_xq,region="dongcheng"):
         print e
         exit(-1)
     d="d="+soup.find('div',{'class':'page-box house-lst-page-box'}).get('page-data')
-    #d={"totalPage":12,"curPage":1}
     exec(d)
     total_pages=d['totalPage']
     print '%s : total_pages %d' % (region, total_pages)
 
     threads=[]
     for i in range(total_pages):
-#    for i in range(1):
         url_page=u"http://bj.lianjia.com/xiaoqu/%s/pg%d" % (region, i+1)
-        xiaoqu_spider(db_xq, url_page)
-#        t=threading.Thread(target=xiaoqu_spider,args=(db_xq,url_page))
-#        threads.append(t)
-#    for t in threads:
-#        t.start()
-#    for t in threads:
-#        t.join()
+#        xiaoqu_spider(db_xq, url_page)
+        t=threading.Thread(target=xiaoqu_spider,args=(db_xq,url_page))
+        threads.append(t)
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
 
 def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%86%A0%E5%BA%AD%E5%9B%AD"):
     """
     爬取页面链接中的成交记录
     """
-#    url_page=u'http://bj.lianjia.com/chengjiao/pg8c1111027373691/'
     try:
         req = urllib2.Request(url_page,headers=hds[random.randint(0,len(hds)-1)])
         source_code = urllib2.urlopen(req,timeout=10).read()
@@ -263,10 +274,10 @@ def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%8
                 print "Error! parsing xiaoquid fail in xiaoqu %s in region page %s" % (xq_url, url_page)
                 continue
 
-            info_dict.update({u'houseid':url_seg[4].split('.')[0]})
-            info_dict.update({u'communityid':communityid})
-            info_dict.update({u'communityname':text[0]})
-            info_dict.update({u'roomnum':text[1]})
+            info_dict.update({u'house_id':url_seg[4].split('.')[0]})
+            info_dict.update({u'community_id':communityid})
+            info_dict.update({u'community_name':text[0]})
+            info_dict.update({u'room_num':text[1]})
             info_dict.update({u'area':text[2]})
 
         content=cj.find('div', {'class':'address'})
@@ -289,7 +300,7 @@ def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%8
             if not totalPrice:
                 print "Error! No totalPrice"
                 continue
-            info_dict.update({u'totalprice':totalPrice.text.strip()})
+            info_dict.update({u'total_price':totalPrice.text.strip()})
 
         content=cj.find('div', {'class':'flood'})
         if content:
@@ -309,7 +320,7 @@ def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%8
             if not unitPrice:
                 print "Error! No unitPrice"
                 continue
-            info_dict.update({u'unitprice':unitPrice.text.strip()})
+            info_dict.update({u'unit_price':unitPrice.text.strip()})
             
         content=cj.find('div', {'class':'dealHouseInfo'})
         if content:
@@ -320,11 +331,11 @@ def chengjiao_spider(db_cj,url_page=u"http://bj.lianjia.com/chengjiao/pg1rs%E5%8
                 for attr in dealHouseTxt:
                     attr=attr.text.strip()
                     if attr.find(u'满')!=-1:
-                        info_dict.update({u'housetype':attr.strip()})
+                        info_dict.update({u'house_type':attr.strip()})
                     elif attr.find(u'学')!=-1:
-                        info_dict.update({u'schooltype':attr.strip()})
+                        info_dict.update({u'school_type':attr.strip()})
                     elif attr.find(u'距')!=-1:
-                        info_dict.update({u'subwaytype':attr.strip()})
+                        info_dict.update({u'subway_type':attr.strip()})
         print "         result size:%d" % len(info_dict.keys())
         command=gen_chengjiao_insert_command(info_dict)
         db_cj.execute(command,1)
@@ -357,19 +368,23 @@ def xiaoqu_chengjiao_spider(db_cj,xq_id=u"1111027375142"):
         exec(d)
         total_pages=d['totalPage']
 
-    threads=[]
     print "total pages:%d" % total_pages
-    for i in range(total_pages):
-#    for i in range(1):
-        url_page=u"http://bj.lianjia.com/chengjiao/pg%dc%s/" % (i+1,urllib2.quote(xq_id))
+    if total_pages == 0:
+        url_page=u"http://bj.lianjia.com/chengjiao/pg1c%s/" % (urllib2.quote(xq_id))
         print "     %s" % url_page
         chengjiao_spider(db_cj,url_page)
-#        t=threading.Thread(target=chengjiao_spider,args=(db_cj,url_page))
-#        threads.append(t)
-#    for t in threads:
-#        t.start()
-#    for t in threads:
-#        t.join()
+    else:
+        threads=[]
+        for i in range(total_pages):
+            url_page=u"http://bj.lianjia.com/chengjiao/pg%dc%s/" % (i+1,urllib2.quote(xq_id))
+            print "     %s" % url_page
+            chengjiao_spider(db_cj,url_page)
+#            t=threading.Thread(target=chengjiao_spider,args=(db_cj,url_page))
+#            threads.append(t)
+#        for t in threads:
+#            t.start()
+#        for t in threads:
+#            t.join()
 
 
 def do_xiaoqu_chengjiao_spider(db_xq,db_cj):
@@ -381,7 +396,7 @@ def do_xiaoqu_chengjiao_spider(db_xq,db_cj):
     for xq in xq_list:
         xiaoqu_chengjiao_spider(db_cj,xq[0])
         count+=1
-        if count > 50:
+        if count > 10:
             exit(-1)
     print 'done'
 
@@ -391,10 +406,10 @@ def exception_spider(db_cj):
     """
 
 if __name__=="__main__":
-    command="create table if not exists xiaoqu (id TEXT primary key UNIQUE, name TEXT, regionb TEXT, regions TEXT, style TEXT, year TEXT, price TEXT, stock TEXT, url TEXT)"
+    command="create table if not exists xiaoqu (community_id TEXT primary key UNIQUE, community_name TEXT, district TEXT, bizcircle TEXT, building_type TEXT, build_time TEXT, avg_price TEXT, stock TEXT, url TEXT)"
     db_xq=SQLiteWraper('lianjia-xq.db',command)
 
-    command="create table if not exists chengjiao (houseid TEXT primary key UNIQUE, communityid TEXT, communityname TEXT, roomnum TEXT, area TEXT, direction TEXT, decorator TEXT, dealtime TEXT, totalprice TEXT, floor TEXT, agent TEXT, unitprice TEXT, housetype TEXT, schooltype TEXT, subwaytype TEXT)"
+    command="create table if not exists chengjiao (house_id TEXT primary key UNIQUE, community_id TEXT, community_name TEXT, room_num TEXT, area TEXT, direction TEXT, decorator TEXT, dealtime TEXT, total_price TEXT, floor TEXT, agent TEXT, unit_price TEXT, houset_ype TEXT, school_type TEXT, subway_type TEXT)"
     db_cj=SQLiteWraper('lianjia-cj.db',command)
 
     #爬下所有的小区信息
